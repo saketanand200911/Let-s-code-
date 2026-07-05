@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember & Vine — Wood-Fired Kitchen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char: #1B1714;
+    --char-2: #241E19;
+    --cream: #F2E9DA;
+    --cream-dim: #C9BDA9;
+    --ember: #BE4522;
+    --ember-bright: #DE6A3C;
+    --olive: #6E7548;
+    --gold: #B8935A;
+    --line: rgba(242,233,218,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--char);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.03em;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ember-bright);
+  }
+
+  /* Visible focus for accessibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(27,23,20,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:1.25rem;
+    font-weight:600;
+  }
+  .logo span{color:var(--ember-bright);}
+  .nav-links{display:flex; gap:36px; font-size:0.92rem;}
+  .nav-links a{position:relative; padding:4px 0; color:var(--cream-dim); transition:color .2s;}
+  .nav-links a:hover{color:var(--cream);}
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--ember-bright);
+    transition:width .25s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    border:1px solid var(--ember-bright); padding:9px 20px; border-radius:2px; font-size:0.85rem;
+    transition:background .2s, color .2s;
+  }
+  .nav-cta:hover{background:var(--ember-bright); color:var(--char);}
+  .burger{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer;}
+  .burger span{width:24px; height:2px; background:var(--cream);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding-top:80px;
+    background:
+      radial-gradient(ellipse at 30% 110%, rgba(190,69,34,0.35), transparent 55%),
+      radial-gradient(ellipse at 80% 0%, rgba(110,117,72,0.18), transparent 45%),
+      var(--char);
+    overflow:hidden;
+  }
+  .embers{position:absolute; inset:0; pointer-events:none;}
+  .ember-particle{
+    position:absolute; bottom:-10px;
+    width:4px; height:4px; border-radius:50%;
+    background:var(--ember-bright);
+    box-shadow:0 0 8px 2px rgba(222,106,60,0.6);
+    animation:rise linear infinite;
+    opacity:0.85;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0); opacity:0;}
+    10%{opacity:0.9;}
+    100%{transform:translateY(-100vh) translateX(20px); opacity:0;}
+  }
+  .hero-inner{position:relative; z-index:2; max-width:1180px; margin:0 auto; padding:0 32px; width:100%;}
+  .hero h1{
+    font-size:clamp(3rem, 7vw, 5.6rem);
+    line-height:0.98;
+    max-width:14ch;
+    margin:22px 0 28px;
+  }
+  .hero h1 em{
+    font-style:italic; color:var(--ember-bright); font-weight:500;
+  }
+  .hero p{
+    max-width:46ch; color:var(--cream-dim); font-size:1.08rem; margin-bottom:36px;
+  }
+  .btn-row{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block; padding:14px 28px; border-radius:2px; font-size:0.92rem;
+    font-weight:500; transition:transform .2s, background .2s, color .2s, border-color .2s;
+  }
+  .btn-primary{background:var(--ember); color:var(--cream);}
+  .btn-primary:hover{background:var(--ember-bright); transform:translateY(-2px);}
+  .btn-ghost{border:1px solid var(--line); color:var(--cream);}
+  .btn-ghost:hover{border-color:var(--cream-dim); transform:translateY(-2px);}
+
+  .hero-meta{
+    position:absolute; right:32px; bottom:48px; z-index:2;
+    text-align:right; color:var(--cream-dim); font-size:0.82rem;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .hero-meta .mono{color:var(--gold);}
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:120px 0;}
+  .section-head{margin-bottom:64px; max-width:640px;}
+  .section-head h2{font-size:clamp(2rem, 4vw, 2.8rem); margin-top:14px;}
+  .rule{
+    height:1px; background:var(--line); border:none; margin:0;
+  }
+
+  /* ---------- PHILOSOPHY ---------- */
+  .philosophy{background:var(--char-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .phil-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:80px; align-items:start;
+  }
+  .phil-grid p{color:var(--cream-dim); margin-bottom:20px; font-size:1.02rem;}
+  .wood-log{
+    list-style:none; display:flex; flex-direction:column;
+  }
+  .wood-log li{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:22px 0; border-bottom:1px solid var(--line);
+    font-size:0.98rem;
+  }
+  .wood-log li:first-child{border-top:1px solid var(--line);}
+  .wood-log .wood-name{font-family:'Fraunces', serif; font-size:1.15rem;}
+  .wood-log .wood-temp{color:var(--gold); font-family:'IBM Plex Mono', monospace; font-size:0.82rem;}
+
+  /* ---------- MENU ---------- */
+  .menu-tabs{display:flex; gap:8px; margin-bottom:48px; flex-wrap:wrap;}
+  .menu-tab{
+    padding:9px 18px; border:1px solid var(--line); border-radius:20px; font-size:0.85rem;
+    color:var(--cream-dim); cursor:pointer; transition:.2s;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .menu-tab.active, .menu-tab:hover{border-color:var(--ember-bright); color:var(--cream); background:rgba(190,69,34,0.12);}
+  .menu-panel{display:none;}
+  .menu-panel.active{display:block; animation:fadeIn .4s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .menu-item{
+    display:grid; grid-template-columns:auto 1fr auto; gap:20px; align-items:baseline;
+    padding:24px 0; border-bottom:1px solid var(--line);
+  }
+  .menu-item:first-child{border-top:1px solid var(--line);}
+  .menu-item .dial{
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--olive);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-size:0.65rem; color:var(--olive);
+    flex-shrink:0;
+  }
+  .menu-item-name{font-family:'Fraunces', serif; font-size:1.2rem;}
+  .menu-item-desc{color:var(--cream-dim); font-size:0.92rem; margin-top:4px;}
+  .menu-item-price{font-family:'IBM Plex Mono', monospace; color:var(--gold); font-size:0.95rem;}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{background:var(--char-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .gallery-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:160px; gap:12px;
+  }
+  .gallery-grid div{
+    border-radius:2px; position:relative; overflow:hidden;
+    display:flex; align-items:flex-end; padding:14px;
+    font-family:'IBM Plex Mono', monospace; font-size:0.7rem; color:var(--cream-dim);
+  }
+  .gallery-grid div::before{content:''; position:absolute; inset:0; opacity:0.9;}
+  .g1{grid-column:span 2; grid-row:span 2;}
+  .g1::before{background:linear-gradient(155deg,#4a2416,#1b1714 70%);}
+  .g2::before{background:linear-gradient(155deg,#5c4a24,#1b1714 70%);}
+  .g3::before{background:linear-gradient(155deg,#3c4526,#1b1714 70%);}
+  .g4{grid-column:span 2;}
+  .g4::before{background:linear-gradient(155deg,#6e2f18,#1b1714 70%);}
+  .g5::before{background:linear-gradient(155deg,#40301d,#1b1714 70%);}
+  .gallery-grid div span{position:relative; z-index:1;}
+
+  /* ---------- RESERVE ---------- */
+  .reserve-grid{display:grid; grid-template-columns:1fr 1fr; gap:80px;}
+  .reserve-info p{color:var(--cream-dim); margin-bottom:24px;}
+  .info-row{display:flex; justify-content:space-between; padding:16px 0; border-bottom:1px solid var(--line); font-size:0.92rem;}
+  .info-row span:first-child{color:var(--cream-dim);}
+  form{display:flex; flex-direction:column; gap:18px;}
+  .field{display:flex; flex-direction:column; gap:8px;}
+  .field label{font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--cream-dim); font-family:'IBM Plex Mono', monospace;}
+  .field input, .field select, .field textarea{
+    background:var(--char-2); border:1px solid var(--line); color:var(--cream);
+    padding:13px 14px; border-radius:2px; font-family:'Work Sans', sans-serif; font-size:0.95rem;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--ember-bright);}
+  .row-2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .submit-note{font-size:0.82rem; color:var(--cream-dim); margin-top:4px;}
+  #formStatus{font-size:0.88rem; color:var(--gold); min-height:20px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:64px 0 40px; border-top:1px solid var(--line);}
+  .footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; margin-bottom:48px;}
+  .footer-grid h4{font-family:'IBM Plex Mono', monospace; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--cream-dim); margin-bottom:16px;}
+  .footer-grid ul{list-style:none;}
+  .footer-grid li{margin-bottom:10px; font-size:0.92rem;}
+  .footer-grid a:hover{color:var(--ember-bright);}
+  .footer-bottom{display:flex; justify-content:space-between; color:var(--cream-dim); font-size:0.8rem; flex-wrap:wrap; gap:12px;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:860px){
+    .nav-links, .nav-cta{display:none;}
+    .burger{display:flex;}
+    .phil-grid, .reserve-grid{grid-template-columns:1fr; gap:48px;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .g1{grid-column:span 2;}
+    .row-2{grid-template-columns:1fr;}
+    .hero-meta{position:static; margin-top:48px; text-align:left;}
+    section{padding:80px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">Ember <span>&</span> Vine</div>
+    <div class="nav-links">
+      <a href="#philosophy">Philosophy</a>
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Kitchen</a>
+      <a href="#reserve">Reserve</a>
+    </div>
+    <a href="#reserve" class="nav-cta">Book a table</a>
+    <button class="burger" aria-label="Toggle menu" id="burgerBtn"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="embers" id="embers"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">Wood-fired kitchen — est. 2016</p>
+    <h1>Cooked over <em>oak</em>, <em>olive</em> and <em>vine</em>.<br>Nothing else.</h1>
+    <p>Ember & Vine is a live-fire Italian kitchen. No gas, no electric — every dish passes through one 900° hearth, the way it's been done in the hills outside Modena for generations.</p>
+    <div class="btn-row">
+      <a href="#reserve" class="btn btn-primary">Reserve a table</a>
+      <a href="#menu" class="btn btn-ghost">View the menu</a>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <span class="mono">HEARTH TEMP · 900°F</span>
+    <span>Tue–Sun, 5pm till late</span>
+  </div>
+</section>
+
+<section class="philosophy" id="philosophy">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Philosophy</p>
+      <h2>One fire. Three woods. No shortcuts.</h2>
+    </div>
+    <div class="phil-grid">
+      <div>
+        <p>We built the hearth before we built the walls. Every plate that leaves this kitchen — bread, vegetable, fish, or steak — touches that same fire, at a different distance and a different moment in its burn.</p>
+        <p>The wood changes with the season and the dish: oak for its long, even heat; olive for a lean, peppery smoke that suits vegetables and lamb; vine cuttings, saved from a neighboring vineyard's spring prune, for a fast, fragrant burn under seafood.</p>
+        <p>Nothing is fried. Nothing is microwaved. If it can't be cooked over embers, it isn't on the menu.</p>
+      </div>
+      <ul class="wood-log">
+        <li><span class="wood-name">Oak</span><span class="wood-temp mono">SLOW BURN</span></li>
+        <li><span class="wood-name">Olive</span><span class="wood-temp mono">LEAN SMOKE</span></li>
+        <li><span class="wood-name">Vine cuttings</span><span class="wood-temp mono">FAST & FRAGRANT</span></li>
+        <li><span class="wood-name">Chestnut</span><span class="wood-temp mono">WINTER ONLY</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Menu</p>
+      <h2>What's on the fire tonight</h2>
+    </div>
+    <div class="menu-tabs" role="tablist">
+      <button class="menu-tab active" data-tab="starters">Starters</button>
+      <button class="menu-tab" data-tab="mains">Mains</button>
+      <button class="menu-tab" data-tab="dolci">Dolci</button>
+    </div>
+
+    <div class="menu-panel active" id="starters">
+      <div class="menu-item">
+        <div class="dial">6m</div>
+        <div><div class="menu-item-name">Charred octopus, olive ash</div><div class="menu-item-desc">Cannellini purée, chili oil, vine-cutting smoke</div></div>
+        <div class="menu-item-price">$21</div>
+      </div>
+      <div class="menu-item">
+        <div class="dial">4m</div>
+        <div><div class="menu-item-name">Hearth flatbread</div><div class="menu-item-desc">Whipped lardo, rosemary, Maldon salt</div></div>
+        <div class="menu-item-price">$14</div>
+      </div>
+      <div class="menu-item">
+        <div class="dial">3m</div>
+        <div><div class="menu-item-name">Blistered padrón peppers</div><div class="menu-item-desc">Aged pecorino, sherry vinegar</div></div>
+        <div class="menu-item-price">$12</div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="mains">
+      <div class="menu-item">
+        <div class="dial">14m</div>
+        <div><div class="menu-item-name">Bistecca alla fiorentina</div><div class="menu-item-desc">32oz dry-aged porterhouse, oak-fired, rosemary oil — for two</div></div>
+        <div class="menu-item-price">$96</div>
+      </div>
+      <div class="menu-item">
+        <div class="dial">9m</div>
+        <div><div class="menu-item-name">Whole branzino, vine smoke</div><div class="menu-item-desc">Fennel, Meyer lemon, salsa verde</div></div>
+        <div class="menu-item-price">$38</div>
+      </div>
+      <div class="menu-item">
+        <div class="dial">11m</div>
+        <div><div class="menu-item-name">Olive-fired lamb shoulder</div><div class="menu-item-desc">Slow-turned, mint gremolata, charred carrot</div></div>
+        <div class="menu-item-price">$42</div>
+      </div>
+      <div class="menu-item">
+        <div class="dial">7m</div>
+        <div><div class="menu-item-name">Wood-fired mushroom risotto</div><div class="menu-item-desc">Porcini ash, taleggio, chive oil (v)</div></div>
+        <div class="menu-item-price">$27</div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="dolci">
+      <div class="menu-item">
+        <div class="dial">2m</div>
+        <div><div class="menu-item-name">Charred fig & mascarpone tart</div><div class="menu-item-desc">Honey from our rooftop hives</div></div>
+        <div class="menu-item-price">$13</div>
+      </div>
+      <div class="menu-item">
+        <div class="dial">—</div>
+        <div><div class="menu-item-name">Olive oil affogato</div><div class="menu-item-desc">Espresso, fior di latte, finishing oil</div></div>
+        <div class="menu-item-price">$11</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The kitchen</p>
+      <h2>Inside the hearth room</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="g1"><span>The hearth, mid-service</span></div>
+      <div class="g2"><span>Oak, split and stacked</span></div>
+      <div class="g3"><span>First plates of the night</span></div>
+      <div class="g4"><span>The pass</span></div>
+      <div class="g5"><span>Last embers, close</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="reserve" id="reserve">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Reserve</p>
+      <h2>Book your table</h2>
+    </div>
+    <div class="reserve-grid">
+      <div class="reserve-info">
+        <p>Walk-ins are welcome at the counter facing the hearth, but the dining room is reserved in advance. Large parties (7+) should call ahead — the whole porterhouse needs notice.</p>
+        <div class="info-row"><span>Address</span><span>412 Kiln Street, Portland OR</span></div>
+        <div class="info-row"><span>Hours</span><span>Tue–Sun, 5pm – midnight</span></div>
+        <div class="info-row"><span>Phone</span><span>(503) 555-0148</span></div>
+        <div class="info-row"><span>Bar seating</span><span>No reservation needed</span></div>
+      </div>
+      <form id="reserveForm">
+        <div class="row-2">
+          <div class="field"><label for="name">Name</label><input id="name" type="text" required placeholder="Your name"></div>
+          <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" required placeholder="(555) 555-5555"></div>
+        </div>
+        <div class="row-2">
+          <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
+          <div class="field"><label for="time">Time</label><input id="time" type="time" required></div>
+        </div>
+        <div class="field">
+          <label for="guests">Guests</label>
+          <select id="guests" required>
+            <option value="">Select party size</option>
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+            <option>5</option><option>6</option><option>7+ (call us)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="notes">Notes (optional)</label>
+          <textarea id="notes" rows="3" placeholder="Allergies, occasions, seating preference"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Request reservation</button>
+        <p class="submit-note" id="formStatus" role="status"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:14px;">Ember <span>&</span> Vine</div>
+        <p style="color:var(--cream-dim); max-width:32ch; font-size:0.9rem;">A live-fire Italian kitchen in Portland, Oregon.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li>412 Kiln Street</li>
+          <li>Portland, OR 97209</li>
+          <li>(503) 555-0148</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <ul>
+          <li>Tue–Thu · 5pm–11pm</li>
+          <li>Fri–Sat · 5pm–midnight</li>
+          <li>Sun · 5pm–10pm</li>
+        </u
